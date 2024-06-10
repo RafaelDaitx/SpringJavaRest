@@ -2,6 +2,7 @@ package api_rest_kotlin.services
 
 import api_rest_kotlin.controller.PersonController
 import api_rest_kotlin.data.vo.v1.PersonVO
+import api_rest_kotlin.exceptions.RequiredObjectsNullException
 import api_rest_kotlin.data.vo.v2.PersonVO as PersonVOV2
 import api_rest_kotlin.exceptions.ResourceNotFoundException
 import api_rest_kotlin.mapper.DozerMapper
@@ -50,6 +51,8 @@ class PersonService {
     }
 
     fun create(person: PersonVO): PersonVO {
+        if(person == null) throw RequiredObjectsNullException()
+
         logger.info("Create one person with name ${person.firstName}!")
         //Converto para uma entidade para persistir no banco
         var entity: Person =  DozerMapper.parseObject(person, Person::class.java)
