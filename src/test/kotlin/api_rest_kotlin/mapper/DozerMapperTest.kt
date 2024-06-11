@@ -1,4 +1,4 @@
-package unitTests.mapper
+package api_rest_kotlin.mapper
 
 import api_rest_kotlin.data.vo.v1.PersonVO
 import api_rest_kotlin.mapper.DozerMapper
@@ -6,7 +6,7 @@ import api_rest_kotlin.model.Person
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import unitTests.mapper.mocks.MockPerson
+import api_rest_kotlin.mocks.MockPerson
 
 class DozerMapperTest {
 

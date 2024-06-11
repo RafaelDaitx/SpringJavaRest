@@ -1,4 +1,4 @@
-package api_rest_kotlin.services.mockito.services
+package api_rest_kotlin.mockito.services
 
 import api_rest_kotlin.repository.PersonRepository
 import api_rest_kotlin.services.PersonService
@@ -14,7 +14,7 @@ import org.mockito.Mock
 import org.mockito.Mockito.`when`
 import org.mockito.MockitoAnnotations
 import org.mockito.junit.jupiter.MockitoExtension
-import unitTests.mapper.mocks.MockPerson
+import api_rest_kotlin.mocks.MockPerson
 import java.util.*
 
 @ExtendWith(MockitoExtension::class)

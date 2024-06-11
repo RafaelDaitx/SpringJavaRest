@@ -1,4 +1,4 @@
-package unitTests.mapper.mocks
+package api_rest_kotlin.mocks
 
 import api_rest_kotlin.data.vo.v1.PersonVO
 import api_rest_kotlin.model.Person
