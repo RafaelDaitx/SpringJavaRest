@@ -1,4 +1,4 @@
-package api_rest_kotlin.integrationtest.controller.withjson
+package api_rest_kotlin.integrationtest.controller.withxml
 
 import api_rest_kotlin.integrationtest.TestConfigs
 import api_rest_kotlin.integrationtest.testcontainers.AbstractIntegrationTest
@@ -21,7 +21,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class PersonControllerJsonTest : AbstractIntegrationTest() {
+class PersonControllerxMLTest : AbstractIntegrationTest() {
 
     private lateinit var objectMapper: ObjectMapper
     private lateinit var specification: RequestSpecification
@@ -47,7 +47,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
         val token = RestAssured.given()
             .basePath("/auth/signin")
             .port(TestConfigs.SERVER_PORT)
-            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .contentType(TestConfigs.CONTENT_TYPE_XML)
             .body(user)
             .`when`()
             .post()
@@ -74,7 +74,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
 
         val content = given()
             .spec(specification)
-            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .contentType(TestConfigs.CONTENT_TYPE_XML)
             .body(person)
             .`when`()
             .post()
@@ -107,7 +107,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
 
         val content = given()
             .spec(specification)
-            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .contentType(TestConfigs.CONTENT_TYPE_XML)
             .body(person)
             .`when`()
             .put()
@@ -139,7 +139,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
 
         val content = given()
             .spec(specification)
-            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .contentType(TestConfigs.CONTENT_TYPE_XML)
             .pathParam("id", person.id)
             .`when`()
             .get("{id}")
@@ -182,7 +182,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
 
         val content = given()
             .spec(specification)
-            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .contentType(TestConfigs.CONTENT_TYPE_XML)
             .`when`()
             .get()
             .then()

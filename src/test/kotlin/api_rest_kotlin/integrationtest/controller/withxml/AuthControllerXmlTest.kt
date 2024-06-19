@@ -1,4 +1,4 @@
-package api_rest_kotlin.integrationtest.controller.withjson
+package api_rest_kotlin.integrationtest.controller.withxml
 
 import api_rest_kotlin.integrationtest.TestConfigs
 import api_rest_kotlin.integrationtest.testcontainers.AbstractIntegrationTest
@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation::class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class AuthControllerJsonTest  : AbstractIntegrationTest() {
+class AuthControllerXmlTest  : AbstractIntegrationTest() {
 
     //armazenar o token
     private lateinit var tokenVO: TokenVO
@@ -34,7 +34,7 @@ class AuthControllerJsonTest  : AbstractIntegrationTest() {
         tokenVO = RestAssured.given()
             .basePath("/auth/signin")
                 .port(TestConfigs.SERVER_PORT)
-                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .contentType(TestConfigs.CONTENT_TYPE_XML)
                 .body(user)
             .`when`()
                 .post()
@@ -54,7 +54,7 @@ class AuthControllerJsonTest  : AbstractIntegrationTest() {
         tokenVO = RestAssured.given()
             .basePath("/auth/refresh")
                 .port(TestConfigs.SERVER_PORT)
-                .contentType(TestConfigs.CONTENT_TYPE_JSON)
+                .contentType(TestConfigs.CONTENT_TYPE_XML)
             .pathParam("username", tokenVO.username)
             .header(
                 TestConfigs.HEADER_PARAM_AUTHORIZATION,

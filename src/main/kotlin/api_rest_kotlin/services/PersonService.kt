@@ -12,6 +12,7 @@ import api_rest_kotlin.repository.PersonRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 import java.util.logging.Logger
 
 @Service
@@ -87,6 +88,23 @@ class PersonService {
         entity.gender = person.gender
 
         val personVO = DozerMapper.parseObject(repository.save(entity), PersonVO::class.java)
+        val withSelfRel = linkTo(PersonController::class.java).slash(personVO.key).withSelfRel()
+        personVO.add(withSelfRel)
+
+        return personVO
+    }
+
+    @Transactional
+    fun disablePerson(id: Long): PersonVO {
+        //@Transactional garante que todo processo deva ser
+        // executado com êxito, é “tudo ou nada” (princípio da atomicidade).
+        //famoso Begin work;
+        logger.info("Disabling one person with ID $id!")
+        repository.DisablePerson(id) //Desabilito e busco o cara que foi desabilitado
+
+        val person = repository.findById(id)
+            .orElseThrow { ResourceNotFoundException("No records found for this ID!") }
+        val personVO: PersonVO =  DozerMapper.parseObject(person, PersonVO::class.java)
         val withSelfRel = linkTo(PersonController::class.java).slash(personVO.key).withSelfRel()
         personVO.add(withSelfRel)
 

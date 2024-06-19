@@ -1,7 +1,5 @@
 package api_rest_kotlin.repository
 
-import api_rest_kotlin.model.Book
-import api_rest_kotlin.model.Person
 import api_rest_kotlin.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
