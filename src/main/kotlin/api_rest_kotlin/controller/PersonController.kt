@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.data.web.SortDefault.SortDefaults
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -70,9 +72,13 @@ class PersonController {
         ]
     )
     fun findAll(@RequestParam(value = "page", defaultValue = "0") page: Int,
-                @RequestParam(value = "limit", defaultValue = "12") limit: Int
+                @RequestParam(value = "size", defaultValue = "12") size: Int,
+                @RequestParam(value = "direction", defaultValue = "asc") direction: String
                 ): ResponseEntity<Page<PersonVO>> {
-        val pageable: Pageable = PageRequest.of(page, limit)
+        val sortDirection: Sort.Direction =
+            if("desc".equals(direction, ignoreCase = true)) Sort.Direction.DESC else Sort.Direction.ASC
+
+        val pageable: Pageable = PageRequest.of(page, size, Sort.by(sortDirection, "firstName"))//qual campo vai ser ordenado, de acordo com a model
         return ResponseEntity.ok(service.findAll(pageable))
     }
 
