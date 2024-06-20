@@ -211,6 +211,8 @@ class PersonControllerxMLTest : AbstractIntegrationTest() {
         person.lastName = "Daitx"
         person.address = "Rua do teste"
         person.gender = "Male"
+        person.enabled = true
     }
+
 
 }

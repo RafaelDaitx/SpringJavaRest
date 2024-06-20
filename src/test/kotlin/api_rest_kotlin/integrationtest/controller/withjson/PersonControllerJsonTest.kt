@@ -97,6 +97,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
         assertEquals("Daitx", item.lastName)
         assertEquals("Rua do teste", item.address)
         assertEquals("Male", item.gender)
+        assertEquals(true, item.enabled)
 
     }
 
@@ -130,11 +131,44 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
         assertEquals("Rodgers", item.lastName)
         assertEquals("Rua do teste", item.address)
         assertEquals("Male", item.gender)
+        assertEquals(true, item.enabled)
 
     }
 
     @Test
     @Order(3)
+    fun disablePerson(){
+
+        val content = given()
+            .spec(specification)
+            .contentType(TestConfigs.CONTENT_TYPE_JSON)
+            .pathParam("id", person.id)
+            .`when`()
+            .patch("{id}")
+            .then()
+            .statusCode(200)
+            .extract()
+            .body()
+            .asString()
+
+        val item = objectMapper.readValue(content, PersonVO::class.java)
+        person = item
+
+        assertNotNull(item.id)
+        assertTrue(item.id > 0)
+        assertNotNull(item.firstName)
+        assertNotNull(item.lastName)
+        assertNotNull(item.address)
+        assertNotNull(item.gender)
+        assertEquals("Rafael", item.firstName)
+        assertEquals("Rodgers", item.lastName)
+        assertEquals("Rua do teste", item.address)
+        assertEquals("Male", item.gender)
+        assertEquals(false, item.enabled)
+    }
+
+    @Test
+    @Order(4)
     fun testFindById(){
 
         val content = given()
@@ -165,7 +199,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
 
     }
     @Test
-    @Order(4)
+    @Order(5)
     fun testDelete(){
              given()
             .spec(specification)
@@ -177,7 +211,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     fun testFindAll(){
 
         val content = given()
@@ -211,6 +245,7 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
         person.lastName = "Daitx"
         person.address = "Rua do teste"
         person.gender = "Male"
+        person.enabled = true
     }
 
 }
