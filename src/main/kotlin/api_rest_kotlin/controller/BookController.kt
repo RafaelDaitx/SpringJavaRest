@@ -1,6 +1,7 @@
 package api_rest_kotlin.controller
 
 import api_rest_kotlin.data.vo.v1.BookVO
+import api_rest_kotlin.data.vo.v1.PersonVO
 import api_rest_kotlin.services.BookService
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
@@ -9,6 +10,11 @@ import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.PagedModel
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -65,8 +71,14 @@ class BookController {
             ),
         ]
     )
-    fun findAll(): List<BookVO> {
-        return service.findAll()
+    fun findAll(@RequestParam(value = "page", defaultValue = "0") page: Int,
+                @RequestParam(value = "size", defaultValue = "12") size: Int,
+                @RequestParam(value = "direction", defaultValue = "asc") direction: String
+    ): ResponseEntity<PagedModel<EntityModel<BookVO>>> {
+        val sortDirection: Sort.Direction =
+            if("desc".equals(direction, ignoreCase = true)) Sort.Direction.DESC else Sort.Direction.ASC
+        val pageable: Pageable = PageRequest.of(page, size, Sort.by(sortDirection, "title"))//qual campo vai ser ordenado, de acordo com a model
+        return ResponseEntity.ok(service.findAll(pageable))
     }
 
     @RequestMapping(

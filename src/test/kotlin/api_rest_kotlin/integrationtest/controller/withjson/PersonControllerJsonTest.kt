@@ -5,6 +5,7 @@ import api_rest_kotlin.integrationtest.testcontainers.AbstractIntegrationTest
 import api_rest_kotlin.integrationtest.vo.AccountCredentialsVO
 import api_rest_kotlin.integrationtest.vo.PersonVO
 import api_rest_kotlin.integrationtest.vo.TokenVO
+import api_rest_kotlin.integrationtest.vo.wrappers.WrapperPersonV0
 import com.fasterxml.jackson.databind.DeserializationFeature
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.restassured.RestAssured
@@ -225,10 +226,11 @@ class PersonControllerJsonTest : AbstractIntegrationTest() {
             .body()
             .asString()
 
-        val people = objectMapper.readValue(content, Array<PersonVO>::class.java)
-        val item = people[0]
+        val wrapper = objectMapper.readValue(content, WrapperPersonV0::class.java)
+        val people = wrapper.embedded!!.persons
+        val item = people?.get(0)
 
-        assertNotNull(item.id)
+        assertNotNull(item!!.id)
         assertNotNull(item.firstName)
         assertNotNull(item.lastName)
         assertNotNull(item.address)

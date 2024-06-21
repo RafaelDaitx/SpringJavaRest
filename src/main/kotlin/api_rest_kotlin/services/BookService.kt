@@ -2,12 +2,17 @@ package api_rest_kotlin.services
 
 import api_rest_kotlin.controller.BookController
 import api_rest_kotlin.data.vo.v1.BookVO
+import api_rest_kotlin.data.vo.v1.PersonVO
 import api_rest_kotlin.exceptions.RequiredObjectsNullException
 import api_rest_kotlin.exceptions.ResourceNotFoundException
 import api_rest_kotlin.mapper.DozerMapper
 import api_rest_kotlin.model.Book
 import api_rest_kotlin.repository.BookRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PagedResourcesAssembler
+import org.springframework.hateoas.EntityModel
+import org.springframework.hateoas.PagedModel
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo
 import org.springframework.stereotype.Service
 import java.util.logging.Logger
@@ -18,19 +23,20 @@ class BookService {
     @Autowired
     private lateinit var repository: BookRepository
 
+    @Autowired
+    private lateinit var assembler: PagedResourcesAssembler<BookVO>
+
+
     private val logger = Logger.getLogger(BookService::class.java.name)
 
-    fun findAll(): List<BookVO> {
+    fun findAll(pageable: Pageable): PagedModel<EntityModel<BookVO>> {
         logger.info("Finding all books!")
 
-        val books = repository.findAll()
-        val vos = DozerMapper.parseListObject(books, BookVO::class.java)
-        for (book in vos){
-            val withSelfRel = linkTo(BookController::class.java).slash(book.key).withSelfRel()
-            book.add(withSelfRel)
-        }
+        val books = repository.findAll(pageable)
+        val vos = books.map { b -> DozerMapper.parseObject(b, BookVO::class.java) }
+        vos.map { b-> b.add(linkTo(BookController::class.java).slash(b.key).withSelfRel()) }
 
-        return vos
+        return assembler.toModel(vos)
     }
 
     fun findById(id: Long): BookVO {

@@ -23,7 +23,8 @@ class YamlMapper : ObjectMapper {
         try {
             val dataToSerialize = context.dataToDeserialize.asString()
             val type = context.type as Class<*>
-            return objectMapper.readValue(dataToSerialize, typeFactory.constructType(type))
+            //return objectMapper.readValue(dataToSerialize, typeFactory.constructType(type))
+            return null
         } catch (e: JsonMappingException){
             e.printStackTrace()
         }catch (e: JsonProcessingException){
@@ -35,7 +36,7 @@ class YamlMapper : ObjectMapper {
 
     override fun serialize(context: ObjectMapperSerializationContext?): Any? {
         try {
-            return objectMapper.writeValueAsString(context.objectToSerialize)
+            return objectMapper.writeValueAsString(context!!.objectToSerialize)
         } catch (e: JsonProcessingException){
             e.printStackTrace()
         }
